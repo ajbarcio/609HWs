@@ -23,10 +23,10 @@ for A in As:
     L[-1,-1] = np.sqrt(A[-1,-1]-np.sum(np.array([L[-1,k]**2 for k in range(np.shape(A)[0]-1)])))
     U = L.T
 
-    print(A)
+    # print(A)
     # print('should be', '\n',np.linalg.cholesky(A))
     print(L)
     print(U)
-    print(L.dot(U))
+    # print(L.dot(U))
     # for i in np.arange(1,np.shape(A)[0]):
     #     for j in np.arange(1,np.shape(A)[0]):
