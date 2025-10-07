@@ -19,28 +19,25 @@ L, U, D = LUD(A)
 # print(U)
 # print(D)
 
-def JacobiStep(A: np.ndarray, b: np.ndarray, x: np.ndarray) -> np.ndarray:
-    xnew = np.zeros_like(x,dtype=np.float64)
- 
+def JacobiStep(A, b, x):
+    x_k1 = np.zeros_like(x,dtype=float)
     for i in range(len(A)):
-        summation = 0
+        sum_term = 0
         for j in range(len(A)):
             if i == j:
                 continue
-            summation +=  A[i,j]*x[j]
-        xnew[i] = (b[i] - summation)/A[i,i]
- 
-    return xnew
+            sum_term +=  A[i,j]*x[j]
+        x_k1[i] = (b[i]-sum_term)/A[i,i]
+    return x_k1
 
-def GaussSeidelStep(A: np.ndarray, b: np.ndarray, x: np.ndarray) -> np.ndarray:
-    # xnew = np.zeros_like(x,dtype=np.float64)
+def GaussSeidelStep(A, b, x):
     for i in range(len(A)):
-        summation = 0
+        sum_term = 0
         for j in range(len(A)):
             if i == j:
                 continue
-            summation +=  A[i,j]*x[j]
-        x[i] = (b[i] - summation)/A[i,i]
+            sum_term +=  A[i,j]*x[j]
+        x[i] = (b[i]-sum_term)/A[i,i]
     return x
 
 i = 0
