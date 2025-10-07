@@ -74,5 +74,5 @@ while res_norm > threshold:
 print(x_gaussS)
 print(np.array(gaussS_out))
 
-sol = np.linalg.solve(A, b)
-print(sol)
+# sol = np.linalg.solve(A, b)
+# print(sol) # just checking teehee
