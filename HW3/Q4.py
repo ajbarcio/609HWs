@@ -18,7 +18,24 @@ L, U, D = LUD(A)
 # print(L)
 # print(U)
 # print(D)
+D_inv = np.zeros_like(D, dtype=float)
+for i in range(len(A)):
+    D_inv[i,i] = 1.0/float(D[i,i])
 
+# print(D_inv)
+B_J = -D_inv.dot(L+U)
+print(B_J)
+B_J_inf = np.linalg.norm(B_J, np.inf)
+print("infinity norm jacobi", B_J_inf)
+rho_B_J = np.max(np.linalg.eig(B_J)[0])
+print("rho jacobi", rho_B_J)
+
+B_GS = -np.linalg.inv(L+D) @ U
+print(B_GS)
+B_GS_inf = np.linalg.norm(B_GS, np.inf)
+print(B_GS_inf, 'infinity norm GS')
+rho_B_GS = np.max(np.linalg.eig(B_GS)[0])
+print(rho_B_GS, 'rho gs')
 # print(np.linalg.eig(A))
 
 def JacobiStep(A, b, x):
