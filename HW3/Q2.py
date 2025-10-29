@@ -23,6 +23,8 @@ b = np.array([4,5,4], dtype = float)
 
 if __name__=="__main__":
 
+    print(np.linalg.eig(A)[0])
+
     L, U, D = LUD(A)
 
     D_inv = np.zeros_like(D, dtype=float)
@@ -31,21 +33,21 @@ if __name__=="__main__":
 
     # print(D_inv)
     B_J = -D_inv.dot(L+U)
-    print(B_J)
+    # print(B_J)
     B_J_inf = np.linalg.norm(B_J, np.inf)
-    print(B_J_inf)
+    print("infinity norm", B_J_inf)
     rho_B_J = np.max(np.linalg.eig(B_J)[0])
-    print(rho_B_J)
+    print("spectral radius:", rho_B_J)
 
     B_GS = -np.linalg.inv(L+D) @ U
-    print(B_GS)
+    # print(B_GS)
     B_GS_inf = np.linalg.norm(B_GS, np.inf)
-    print(B_GS_inf)
+    print("infinity norm", B_GS_inf)
     rho_B_GS = np.max(np.linalg.eig(B_GS)[0])
-    print(rho_B_GS)
+    print("spectral radius:", rho_B_GS)
 
     omega_star = 2/(1+np.sqrt(1-rho_B_J**2))
-    print(omega_star)
+    print("optimal SOR parameter", omega_star)
     print("for A sym. pos. def, omega should be between 0 and 2, and it is")
 
 
@@ -129,3 +131,10 @@ if __name__=="__main__":
     print(GS_table)
     SOR_table = SOR(10, x_0)
     print(SOR_table)
+
+    from array_to_latex import to_ltx
+
+    to_ltx(J_table, frmt="{:.5f}", arraytype="tabular")
+    to_ltx(GS_table, frmt="{:.5f}", arraytype="tabular")
+    to_ltx(SOR_table, frmt="{:.5f}", arraytype="tabular")
+    # print(J_table_formatted)
