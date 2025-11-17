@@ -27,9 +27,13 @@ def GaussSeidelStep(A, b, x):
 
 def GD_step(A, b, x):
     r = b - A @ x
-    alpha = r.dot(r)/(r.dot(A @ r))
-    x = x + alpha*r
-    return x, r
+    # print(A, r)
+    if np.linalg.norm(r) == 0:
+        return x, r
+    else:
+        alpha = r.dot(r)/(r.dot(A @ r))
+        x = x + alpha*r
+        return x, r
 
 def CG_step(A, b, x, d):
     r = b - A @ x
@@ -74,34 +78,37 @@ def create_problem(size):
     # print(A)
     # print(b)
     return A, b, x0
+def main():
+    A1, b1, x01 = create_problem(16)
+    A2, b2, x02 = create_problem(32)
+    # A2 = np.array()
 
-A1, b1, x01 = create_problem(16)
-A2, b2, x02 = create_problem(32)
-# A2 = np.array()
+    x1, iters, res = solve(A1, b1, x01, GD_step, 1000, 1e-5)
+    print(x1, iters, res)
+    x1, iters, res = solveCG(A1, b1, x01, CG_step, 1000, 1e-5)
+    print(x1, iters, res)
 
-x1, iters, res = solve(A1, b1, x01, GD_step, 1000, 1e-5)
-print(x1, iters, res)
-x1, iters, res = solveCG(A1, b1, x01, CG_step, 1000, 1e-5)
-print(x1, iters, res)
+    x2, iters, res = solve(A2, b2, x02, GD_step, 1000, 1e-5)
+    print(x2, iters, res)
+    x2, iters, res = solveCG(A2, b2, x02, CG_step, 1000, 1e-5)
+    print(x2, iters, res)
 
-x2, iters, res = solve(A2, b2, x02, GD_step, 1000, 1e-5)
-print(x2, iters, res)
-x2, iters, res = solveCG(A2, b2, x02, CG_step, 1000, 1e-5)
-print(x2, iters, res)
+    A = np.array([[10, 1,  2,    3,  4],
+                [1,  9, -1,    2, -3],
+                [2, -1,  7,    3, -5],
+                [3,  2,  3,   12, -1],
+                [4, -3, -5,   -1, 15]])
+    b = np.array([12, -27, 14, -17, 12])
 
-A = np.array([[10, 1,  2,    3,  4],
-              [1,  9, -1,    2, -3],
-              [2, -1,  7,    3, -5],
-              [3,  2,  3,   12, -1],
-              [4, -3, -5,   -1, 15]])
-b = np.array([12, -27, 14, -17, 12])
+    x_J,  iters_J, res_J   = solve  (A, b, np.zeros(len(b)), JacobiStep, 1000, 1e-5)
+    x_GS, iters_GS, res_GS = solve  (A, b, np.zeros(len(b)), GaussSeidelStep, 1000, 1e-5)
+    x_GD, iters_GD, res_GD = solve  (A, b, np.zeros(len(b)), GD_step, 1000, 1e-5)
+    x_CG, iters_CG, res_CG = solveCG(A, b, np.zeros(len(b)), CG_step, 1000, 1e-5)
+    print("----------------------------------------------------")
+    print("Jacobi      :", x_J, iters_J, res_J)
+    print("Gauss Seidel:", x_GS, iters_GS, res_GS)
+    print("Grad Descent:", x_GD, iters_GD, res_GD)
+    print("Conjgte Grad:", x_CG, iters_CG, res_CG)
 
-x_J,  iters_J, res_J   = solve  (A, b, np.zeros(len(b)), JacobiStep, 1000, 1e-5)
-x_GS, iters_GS, res_GS = solve  (A, b, np.zeros(len(b)), GaussSeidelStep, 1000, 1e-5)
-x_GD, iters_GD, res_GD = solve  (A, b, np.zeros(len(b)), GD_step, 1000, 1e-5)
-x_CG, iters_CG, res_CG = solveCG(A, b, np.zeros(len(b)), CG_step, 1000, 1e-5)
-print("----------------------------------------------------")
-print("Jacobi      :", x_J, iters_J, res_J)
-print("Gauss Seidel:", x_GS, iters_GS, res_GS)
-print("Grad Descent:", x_GD, iters_GD, res_GD)
-print("Conjgte Grad:", x_CG, iters_CG, res_CG)
+if __name__ == "__main__":
+    main()
