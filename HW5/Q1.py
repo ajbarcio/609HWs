@@ -1,5 +1,4 @@
 import numpy as np
-from HW4.Q4 import solve, GaussSeidelStep
 
 def G(x):
     return np.array([(x[0]**2+x[1]**2+8), x[0]*x[1]**2+x[0]+8])*1/10.0
